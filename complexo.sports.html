@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complex Sports - Prévia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+  <!-- GSAP para a animação do StrokeText -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <style>
+    /* =========================================
+       Estilos Globais
+       ========================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #050505;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .gym-app {
+      width: 100%;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      background: #000;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid #222;
+    }
+
+    /* =========================================
+       StrokeText
+       ========================================= */
+    .stroke-text-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      line-height: 1.1;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+      text-align: center;
+      font-size: clamp(3.5rem, 8vw, 8rem);
+      font-weight: 800;
+      letter-spacing: -4px;
+    }
+
+    .stroke-text__char {
+      display: inline-block;
+      background-size: 0% 100%;
+      transition: background-size 0.1s;
+    }
+
+    /* =========================================
+       Hero Section
+       ========================================= */
+    .hero-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #050505;
+      background-image: radial-gradient(circle at center, #1a080c 0%, #050505 70%);
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .hero-subtitle {
+      color: #F59E0B;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      font-size: 1rem;
+      margin-bottom: -1rem;
+    }
+
+    .hero-description {
+      color: #a3a3a3;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 1rem auto 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-instagram {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
+    }
+
+    .btn-instagram:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.5);
+    }
+
+    .btn-whatsapp {
+      background: #222;
+      color: #666;
+      border: 1px solid #333;
+      cursor: not-allowed;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(225, 29, 72, 0.03) 2px,
+        rgba(225, 29, 72, 0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* =========================================
+       Workouts Section
+       ========================================= */
+    .workouts-section {
+      padding: 5rem 2rem;
+      background-color: #0a0a0a;
+      color: white;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .section-title span {
+      color: #E11D48;
+    }
+
+    .title-underline {
+      height: 4px;
+      width: 60px;
+      background-color: #F59E0B;
+      margin: 1rem auto 0;
+      border-radius: 2px;
+    }
+
+    .workouts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .workout-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .workout-card:hover {
+      transform: translateY(-10px);
+      border-color: #E11D48;
+      box-shadow: 0 10px 30px rgba(225, 29, 72, 0.15);
+    }
+
+    .workout-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .workout-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #F8FAFC;
+    }
+
+    .workout-desc {
+      color: #888;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* =========================================
+       Models 3D Section
+       ========================================= */
+    .models3d-section {
+      padding: 5rem 2rem;
+      background-color: #050505;
+      color: white;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #a3a3a3;
+      margin-top: 1rem;
+    }
+
+    .models-container {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 3rem auto 0;
+    }
+
+    .model-placeholder {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle at center, #1a1a1a, #050505);
+      border: 1px solid #333;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+    }
+
+    .model-cube {
+      width: 100px;
+      height: 100px;
+      background: rgba(225, 29, 72, 0.2);
+      border: 2px solid #E11D48;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: floatCube 4s ease-in-out infinite alternate;
+      box-shadow: 0 0 30px rgba(225, 29, 72, 0.4);
+    }
+
+    .alt-cube {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #F59E0B;
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+      animation-delay: 1s;
+    }
+
+    .model-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: white;
+    }
+
+    @keyframes floatCube {
+      0% { transform: translateY(0) rotateX(10deg) rotateY(10deg); }
+      100% { transform: translateY(-20px) rotateX(20deg) rotateY(30deg); }
+    }
+
+    /* =========================================
+       Reviews Section
+       ========================================= */
+    .reviews-section {
+      padding: 5rem 2rem;
+      background-color: #0a0a0a;
+      color: white;
+      text-align: center;
+    }
+
+    .reviews-container {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto 3rem;
+    }
+
+    .review-card {
+      background: #151515;
+      padding: 2rem;
+      border-radius: 12px;
+      border-left: 4px solid #F59E0B;
+      flex: 1;
+      min-width: 280px;
+      text-align: left;
+    }
+
+    .stars {
+      color: #F59E0B;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .review-text {
+      font-style: italic;
+      color: #ccc;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .reviewer {
+      font-weight: 700;
+      color: #E11D48;
+    }
+
+    .maps-btn {
+      display: inline-block;
+      background: #222;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid #444;
+      transition: all 0.3s;
+    }
+
+    .maps-btn:hover {
+      background: #333;
+      border-color: #F59E0B;
+    }
+  </style>
+</head>
+<body>
+  <div class="gym-app">
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <p class="hero-subtitle">BEM-VINDO AO</p>
+        
+        <!-- Componente StrokeText (Vanilla JS) -->
+        <div id="stroke-text-container" class="stroke-text-container hero-title"></div>
+        
+        <p class="hero-description">
+          A academia com a melhor estrutura de Fortaleza. Supere seus limites em um ambiente tecnológico, premium e focado em resultados.
+        </p>
+        <div class="hero-buttons">
+          <a href="https://www.instagram.com/complexospot" target="_blank" rel="noreferrer" class="btn btn-instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" height="24" width="24" style="vertical-align: middle; margin-right: 8px;"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>Siga nosso Instagram
+          </a>
+          <button class="btn btn-whatsapp disabled" title="Em breve">
+             WhatsApp (Em Breve)
+          </button>
+        </div>
+      </div>
+      <div class="hero-overlay"></div>
+    </section>
+
+    <!-- WORKOUTS SECTION -->
+    <section class="workouts-section">
+      <div class="section-header">
+        <h2 class="section-title">NOSSOS <span>TREINOS</span></h2>
+        <div class="title-underline"></div>
+      </div>
+      <div class="workouts-grid">
+        <div class="workout-card">
+          <div class="workout-icon">💪</div>
+          <h3 class="workout-name">Musculação</h3>
+          <p class="workout-desc">Equipamentos de última geração para hipertrofia e definição.</p>
+        </div>
+        <div class="workout-card">
+          <div class="workout-icon">🔥</div>
+          <h3 class="workout-name">Cross Training</h3>
+          <p class="workout-desc">Alta intensidade para melhorar seu condicionamento físico.</p>
+        </div>
+        <div class="workout-card">
+          <div class="workout-icon">🏃</div>
+          <h3 class="workout-name">Cardio</h3>
+          <p class="workout-desc">Esteiras e bikes com telas interativas e programas focados.</p>
+        </div>
+        <div class="workout-card">
+          <div class="workout-icon">🥊</div>
+          <h3 class="workout-name">Lutas</h3>
+          <p class="workout-desc">Espaço dedicado para Boxe, Muay Thai e Jiu-Jitsu.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODELS 3D SECTION -->
+    <section class="models3d-section">
+      <div class="section-header">
+        <h2 class="section-title">ESTRUTURA <span>3D</span></h2>
+        <div class="title-underline"></div>
+        <p class="section-subtitle">Explore nossos modelos 3D interativos (Prévia)</p>
+      </div>
+      <div class="models-container">
+        <div class="model-placeholder">
+          <div class="model-cube">
+            <span class="model-label">Halteres 3D</span>
+          </div>
+        </div>
+        <div class="model-placeholder">
+          <div class="model-cube alt-cube">
+            <span class="model-label">Esteira 3D</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS SECTION -->
+    <section class="reviews-section">
+      <div class="section-header">
+        <h2 class="section-title">O QUE <span>DIZEM</span> DE NÓS</h2>
+        <div class="title-underline"></div>
+      </div>
+      <div class="reviews-container">
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"A melhor academia de Fortaleza! Equipamentos novos, ambiente climatizado e professores super atenciosos."</p>
+          <span class="reviewer">- Cliente Satisfeito</span>
+        </div>
+        <div class="review-card">
+          <div class="stars">★★★★★</div>
+          <p class="review-text">"Estrutura premium. O design do lugar motiva muito a treinar todos os dias."</p>
+          <span class="reviewer">- Aluno Frequente</span>
+        </div>
+      </div>
+      <div class="maps-link-container">
+        <a href="https://www.google.com/maps/place/Complexo+Spot/@-3.8282081,-38.4793935,17z/data=!3m1!4b1!4m6!3m5!1s0x7c7457806cc1be3:0xe0b3cce3f009655b!8m2!3d-3.8282135!4d-38.4768132!16s%2Fg%2F11s8625fgy?entry=ttu" target="_blank" rel="noreferrer" class="maps-btn">
+          📍 Ver Avaliações no Google Maps
+        </a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>© 2026 Complex Sports. Todos os direitos reservados.</p>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const text = "Complex Sports";
+      const strokeColor = "#A78BFA";
+      const fillColor = "#F8FAFC";
+      const strokeWidth = 1.4;
+      const drawDuration = 1.6;
+      const fillDelay = 0.2;
+      const stagger = 0.05;
+      
+      const container = document.getElementById("stroke-text-container");
+      
+      text.split('').forEach(char => {
+        const span = document.createElement('span');
+        span.className = 'stroke-text__char';
+        
+        span.style.backgroundImage = `linear-gradient(to right, ${fillColor} 50%, transparent 50%)`;
+        span.style.webkitBackgroundClip = 'text';
+        span.style.backgroundRepeat = 'no-repeat';
+        span.style.backgroundPosition = 'left';
+        
+        span.style.color = 'transparent';
+        span.style.webkitTextStroke = `${strokeWidth}px ${strokeColor}`;
+        span.style.backgroundSize = '0% 100%';
+        
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        container.appendChild(span);
+      });
+
+      const chars = container.querySelectorAll('.stroke-text__char');
+      const tl = gsap.timeline({ delay: 0.1 });
+
+      tl.to(chars, {
+        backgroundSize: '100% 100%',
+        duration: drawDuration,
+        ease: "power2.out",
+        stagger: stagger,
+        delay: fillDelay
+      });
+    });
+  </script>
+</body>
+</html>
